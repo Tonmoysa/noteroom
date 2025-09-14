@@ -18,19 +18,29 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(10px, 2vw, 20px);
   min-height: 100vh;
   overflow-y: auto;
+  -ms-overflow-style: none;
+  
+}
+.swal2-backdrop-show{
+  background-color: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+body::-webkit-scrollbar{
+  display: none;
 }
 
 .middle-section-upload {
-  width: 100%;
+  width: 45vw;
   max-width: 1400px;
-  padding: clamp(20px, 3vw, 40px);
+  min-height: 100vh;
+  padding: clamp(6.5rem, 7vw, 10rem) clamp(15px, 2vw, 20px);
   display: flex;
   flex-direction: column;
   gap: clamp(20px, 2.5vw, 30px);
-  margin: clamp(20px, 5vw, 40px) 0;
 }
 
 .upload-nav {
@@ -49,7 +59,7 @@ body {
 
 .nav-options {
   display: flex;
-  gap: clamp(10px, 2vw, 20px);
+  gap: clamp(2rem, 10vw, 2.2rem);
 }
 
 .nav-options span {
@@ -66,9 +76,6 @@ body {
   padding-bottom: 2px;
 }
 
-.nav-options span:hover {
-  
-}
 
 .form-group {
   display: flex;
@@ -88,7 +95,7 @@ body {
 }
 
 .note-title {
-  width: 680px;
+  width: 100%;
   padding: clamp(10px, 1.5vw, 15px);
   border: 1px solid #ddd;
   border-radius: 20px;
@@ -120,6 +127,43 @@ body {
   background-position: right clamp(8px, 1.5vw, 15px) center;
   background-size: clamp(8px, 1.5vw, 12px) clamp(4px, 1vw, 6px);
 }
+.Note-Title {
+  margin:20px 0;
+  position:relative;
+  display:inline-block;
+
+}
+  
+.Title-placeholder {
+  
+  padding:20px 30px;
+  pointer-events: none;
+  position:absolute;
+  left:0;
+
+  transition: 0.2s;
+  transition-timing-function: ease;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  opacity:0.5;
+ 
+}
+
+.note-title {
+  padding:20px;
+}
+
+.note-title:focus + .Title-placeholder, .note-title:not(:placeholder-shown) + .Title-placeholder {
+  opacity:1;
+  transform: scale(0.75) translateY(-40%) translateX(-20px);
+  font-weight: bold;
+  color: #a0a0a0;
+}
+
+/* For IE Browsers*/
+.note-title:focus + .Title-placeholder, .note-title:not(:-ms-input-placeholder) + .Title-placeholder {
+  opacity:1;
+  transform: scale(0.75) translateY(-100%) translateX(-10px);
+}
 
 .char-count {
   align-self: flex-end;
@@ -138,9 +182,8 @@ body {
   border: 1px solid #ddd;
   border-radius: 20px;
   transition: border-color 0.3s ease;
+  position: relative;
 }
-
-
 
 .upload-placeholder {
   width: 100%;
@@ -185,9 +228,8 @@ body {
   align-items: center;
   justify-content: space-between;
   position: relative;
-  padding: 0 clamp(50px, 5vw, 60px);
+  padding: 0 clamp(1.8rem, 5vw, 2.5rem);
   background-color: transparent;
-  margin: 10px 0;
 }
 
 .carousel-actions {
@@ -200,6 +242,7 @@ body {
   width: 100%;
   padding: 0 10px;
   gap: clamp(5px, 1vw, 10px);
+  z-index: 10;
 }
 
 .carousel-right-actions {
@@ -219,15 +262,70 @@ body {
   font-size: clamp(0.7rem, 1.8vw, 0.9rem);
   color: #000;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.action-btn:hover {
+.action-btn:active {
   background: var(--neon-blue);
   color: #fff;
-  border-color: var(--neon-blue);
-  transform: translateY(-2px);
+}
+
+.action-btn.close-btn {
+  background: #ffebec;
+  color: #d32f2f;
+}
+
+.action-btn.close-btn svg {
+  stroke: #d32f2f;
+}
+
+.action-btn.close-btn:active {
+  background: #ffd5d5;
+}
+
+.action-btn.add-btn:disabled {
+  cursor: not-allowed;
+  background: #eaeaea;
+  color: #999;
+  opacity: 0.7;
+  border: 1px solid #ddd;
+  transform: none;
+}
+
+.action-btn.add-btn:disabled svg {
+  opacity: 0.5;
+}
+
+.action-btn.add-btn:disabled path,
+.action-btn.add-btn:disabled rect {
+  stroke: #999;
+}
+
+@media (min-width: 1024px) {
+  /* Only apply hover effects on larger screens/desktop devices */
+  .action-btn:hover {
+    background: var(--neon-blue);
+    color: #fff;
+    border-color: var(--neon-blue);
+    transform: translateY(-2px);
+  }
+  
+  .action-btn.close-btn:hover {
+    background: #ffd5d5;
+  }
+  
+  .rotate-btn:hover {
+    background: var(--neon-blue);
+  }
+  
+  .rotate-btn.rotate-left:hover svg {
+    transform: rotate(-30deg);
+  }
+
+  .rotate-btn.rotate-right:hover svg {
+    transform: rotate(30deg);
+  }
 }
 
 .carousel-image-wrapper {
@@ -277,7 +375,58 @@ body {
   stroke: #fff;
 }
 
-.delete-btn {
+.edit-options {
+  position: absolute;
+  top: clamp(120px,2vw,150px);
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%);
+  padding: 10px clamp(15px,1.5vw,30px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.rotate-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--squid-ink);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rotate-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.rotate-btn:active {
+  background: var(--neon-blue);
+}
+
+@media (min-width: 1024px) {
+  /* Only apply hover effects on larger screens/desktop devices */
+  .rotate-btn:hover {
+    background: var(--neon-blue);
+  }
+  
+  .rotate-btn.rotate-left:hover svg {
+    transform: rotate(-30deg);
+  }
+
+  .rotate-btn.rotate-right:hover svg {
+    transform: rotate(30deg);
+  }
+}
+
+.delete-btn, .edit-btn {
   background: rgb(255, 255, 255);
   border: none;
   width: 30px;
@@ -287,10 +436,16 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  border-radius: 10px;
 }
 
 .delete-btn:hover {
   background: rgba(255, 220, 220, 0.9);
+  transform: scale(1.1);
+}
+
+.edit-btn:hover {
+  background: rgba(134, 234, 134, 0.9);
   transform: scale(1.1);
 }
 
@@ -312,122 +467,9 @@ body {
   color: #fff;
 }
 
-/* start css youtube link */
+/* start youtube link */
 
-
-.youtube-link-container {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-}
-
-.youtube-link-input-wrapper {
-  margin-bottom: 20px;
-}
-
-.youtube-link-input {
-  width: 680px;
-  height: 55px;
-  padding: 12px 15px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.youtube-link-input::placeholder {
-  color: #999;
-}
-
-.youtube-preview-container {
-  margin-top: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: #f9f9f9;
-}
-
-.video-controls-top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-.add-btn {
-  /* background-color: #4285f4;
-  color: white; */
-  border: none;
-  border-radius: 4px;
-  /* padding: 8px 16px; */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/* .add-btn:hover {
-  background-color: #3367d6;
-} */
-
-.delete-btn {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  color: #666;
-  padding: 5px;
-}
-
-.delete-btn:hover {
-  color: #333;
-}
-
-.video-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.carousel-btn-link {
-  background-color: rgba(255, 255, 255, 0.7);
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: absolute;
-  z-index: 10;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* .carousel-btn:hover {
-  background-color: rgba(255, 255, 255, 0.9);
-} */
-
-.carousel-btn-link.left {
-  left: 10px;
-}
-
-.carousel-btn-link.right {
-  right: 10px;
-}
-
-.youtube-preview {
-  width: 100%;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.youtube-preview iframe {
-  border: none;
-  border-radius: 4px;
-}
-
-/* end css youtube link */
+/* end youtube link */
 
 .pdf-preview-container {
   width: 100%;
@@ -451,6 +493,7 @@ body {
 .pdf-preview-wrapper:hover {
   transform: scale(1.02);
 }
+
 .addButton{
   text-align: left;
   width: 100%;
@@ -458,11 +501,12 @@ body {
 }
 
 .pdf-preview-canvas {
-  z-index: 0;
+  z-index: 1000;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .pdfAddBtn{
   border: none;
   background: var(--light-gray);
@@ -473,10 +517,44 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
 .pdfAddBtn:hover {
   background-color: #e8e6e6;
   
 }
+.File-Name {
+  width: 150px; /* Set the width to 150px */
+  white-space: nowrap; /* Prevent line breaks */
+  overflow: hidden; /* Hide the overflowed content */
+  text-overflow: ellipsis; /* Add an ellipsis (...) for overflowed text */
+}
+.Progress-Bar {
+  width: 150px;
+  height: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #e0e0e0; /* Light gray background */
+}
+
+/* Chrome, Safari, Opera */
+.Progress-Bar::-webkit-progress-bar {
+  background-color: #00DF80;
+  border-radius: 4px;
+}
+
+.Progress-Bar::-webkit-progress-value {
+  background-color: #00DF80; /* Light green */
+  border-radius: 4px;
+}
+
+/* Firefox */
+.Progress-Bar::-moz-progress-bar {
+  background-color: #00DF80; /* Light green */
+}
+
 .pdf-delete-btn {
   position: absolute;
   top: 10px;
@@ -493,10 +571,12 @@ body {
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 .pdf-delete-btn:hover {
   background: rgba(255, 220, 220, 0);
   transform: scale(1.1);
 }
+
 .pdf-file-name {
   font-size: clamp(0.8rem, 2vw, 1rem);
   color: #333;
@@ -512,9 +592,11 @@ body {
   justify-content: space-between;
   padding-bottom: 5px;
 }
+
 .pdf-Icon-Name{
   display: flex;
 }
+
 .File-Name{
  
   overflow: hidden;
@@ -523,10 +605,12 @@ body {
 .pdf-Delete-Btn{
   border: none;
 }
+
 .pdf-Delete-Btn:hover {
   
   transform: scale(1.1);
 }
+
 .PdfIcon{
   margin-top: -3px;
  margin-right: 5px;
@@ -656,7 +740,6 @@ body {
   border-radius: 0 0 12px 12px;
   font-family: inherit;
 }
-
 
 .math-editor-container {
   display: flex;
@@ -1044,22 +1127,26 @@ math-field:focus-within {
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
+  .search-container{
+    width: 50vw;
+  }
+
   .middle-section-upload {
-    max-width: 90%;
-    padding: clamp(15px, 2vw, 20px);
+    min-width: 55vw;
   }
 
   .upload-nav h2 {
-    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    flex-direction: column;
   }
 
   .nav-options {
-    gap: clamp(8px, 1.5vw, 15px);
+    gap: clamp(10px, 2.5vw, 20px);
   }
 
   .nav-options span {
-    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
   }
 
   .note-title,
@@ -1067,18 +1154,39 @@ math-field:focus-within {
   .youtube-link-input {
     width: 100%;
     font-size: clamp(0.7rem, 1.8vw, 0.9rem);
-    padding: clamp(6px, 1.2vw, 8px);
+    padding: clamp(9px, 1.2vw, 12px);
+    border-radius: clamp(8px, 1.5vw, 12px);
+    margin-left: 0px;
   }
 
-  .carousel-image-wrapper,
+  .Title-placeholder{
+    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+    padding: 10px 20px;
+  }
+  .note-title:focus + .Title-placeholder, .note-title:not(:placeholder-shown) + .Title-placeholder{
+    transform: scale(0.5) translateY(-45%) translateX(-30px);
+  }
   .pdf-preview-wrapper {
     width: 150px;
     height: 225px;
   }
-
+  .carousel-actions{
+    padding: 0 10px;
+  }
+  
   .carousel-btn {
     width: 35px;
     height: 35px;
+  }
+
+  .carousel-btn.prev{
+    margin-right: 1rem;
+  }
+  .carousel-btn.next{
+    margin-left: 1rem;
+  }
+  .carousel-container{
+    padding: 0 1.5rem;
   }
 
   .ql-editor {
@@ -1103,11 +1211,6 @@ math-field:focus-within {
   .add-math-btn svg {
     width: clamp(13px, 2.2vw, 18px);
     height: clamp(13px, 2.2vw, 18px);
-  }
-
-  .button-group {
-    flex-direction: column;
-    gap: clamp(8px, 1.5vw, 12px);
   }
 
   .save-draft-btn,
@@ -1153,29 +1256,44 @@ math-field:focus-within {
   }
 }
 
+
+
 @media (max-width: 768px) {
-  .middle-section-upload {
-    max-width: 95%;
-    padding: clamp(10px, 2vw, 15px);
+  .search-container{
+    width: 95vw;
   }
 
-  .upload-nav h2 {
-    font-size: clamp(1rem, 2.2vw, 1.2rem);
+  .middle-section-upload {
+    min-width: 80vw;
+  }
+  .Title-placeholder {
+   font-weight: bold;
+    transition: 0.2s;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    opacity:0.5;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
+    background-color: white;
+    padding: 0 2px;
+    margin: 10px 20px;
+  }
+  .note-title:focus + .Title-placeholder, .note-title:not(:placeholder-shown) + .Title-placeholder {
+    opacity:1;
+    transform: scale(0.75) translateY(-25px) translateX(-20px);
+    font-weight: bold;
+    color: #a0a0a0;
+ 
   }
 
   .nav-options {
-    gap: clamp(5px, 1vw, 10px);
+    gap: clamp(1.3rem, 2vw, 1.5rem);
   }
 
-  .nav-options span {
-    font-size: clamp(0.6rem, 1.5vw, 0.8rem);
-  }
-
-  .carousel-image-wrapper,
+  /* .carousel-image-wrapper,
   .pdf-preview-wrapper {
-    width: 120px;
-    height: 180px;
-  }
+    width: 30px;
+    height: 220px;
+  } */
 
   .carousel-btn {
     width: 30px;
@@ -1206,10 +1324,21 @@ math-field:focus-within {
   }
   .Progress-Bar{
     width: 40px;
+    
   }
   .add-math-btn svg {
     width: clamp(12px, 2vw, 16px);
     height: clamp(12px, 2vw, 16px);
+  }
+
+  .rotate-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .rotate-btn svg {
+    width: 16px;
+    height: 16px;
   }
 
   .mcq-header h3 {
@@ -1232,4 +1361,35 @@ math-field:focus-within {
     font-size: clamp(0.6rem, 1.5vw, 0.8rem);
     padding: clamp(5px, 1vw, 6px);
   }
+}
+
+@media (max-width: 480px) {
+  .middle-section-upload{
+    width: 93vw;
+  }
+
+  .upload-nav{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(1.5rem, 2vw, 2rem);
+  }
+
+  .carousel-container{
+    padding: 0 1rem;
+  }
+
+  .carousel-image-wrapper{
+    height: 320px;
+  }
+
+  .rotate-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .rotate-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
 }

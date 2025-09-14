@@ -1,14 +1,14 @@
 import { useState } from "react";
 import ShareModal from "../../partials/ShareModal";
-import { FeedNoteObject } from "../../types/types";
-import { useFeed } from "../../context/FeedNoteContext";
+import { useFeed } from "../../context/feed.context";
+import { PostType } from "../../../../types/post.types";
 
-export default function FeedNoteMenu({ note }: { note: FeedNoteObject }) {
+export default function FeedNoteMenu({ note }: { note: PostType }) {
   const [showMenu, setShowMenu] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
-  const { controller: [, saveNote] } = useFeed()
-  const isSaveNote = note.interactionData.isSaved
+  const { controller: [, saveNote, download] } = useFeed()!
+  const isSaveNote = note?.interactionData?.isSaved
 
   return (
     <div className="note-menu">
@@ -27,10 +27,10 @@ export default function FeedNoteMenu({ note }: { note: FeedNoteObject }) {
         </svg>
       </button>
       <div className={"menu-options " + (showMenu ? "active" : "")}>
-        { note.isQuickPost || <>
+        <>
           <div
             className="option svn-btn-parent"
-            onClick={() => saveNote({ noteID: note?.noteData.noteID, noteTitle: note?.noteData.noteTitle, noteThumbnail: note?.contentData.content1}, isSaveNote)}
+            onClick={() => saveNote({ postID: note?.postID, title: note?.title, content: note?.content }, isSaveNote)}
           >
             <button
               className={"save-note-btn " + (isSaveNote ? "saved" : "")}
@@ -66,28 +66,31 @@ export default function FeedNoteMenu({ note }: { note: FeedNoteObject }) {
                 />
               </svg>
             </button>
-            <span className="opt-label">Save Note</span>
+            <span className="opt-label">Save Post</span>
           </div>
 
-          <div className="option">
-            <svg
-              width="40"
-              height="40"
-              viewBox="0 0 43 43"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M37.1541 26.5395V33.6165C37.1541 34.555 36.7813 35.455 36.1177 36.1186C35.4541 36.7822 34.5541 37.155 33.6156 37.155H8.84623C7.90776 37.155 7.00773 36.7822 6.34414 36.1186C5.68054 35.455 5.30774 34.555 5.30774 33.6165V26.5395M12.3847 17.6933L21.2309 26.5395M21.2309 26.5395L30.0771 17.6933M21.2309 26.5395V5.30859"
-                stroke="#1E1E1E"
-                strokeWidth="2.29523"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span className="opt-label">Download</span>
-          </div>
-        </>}
+          {
+            note?.content?.totalContentCount !== 0 &&
+            <div className="option">
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 43 43"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M37.1541 26.5395V33.6165C37.1541 34.555 36.7813 35.455 36.1177 36.1186C35.4541 36.7822 34.5541 37.155 33.6156 37.155H8.84623C7.90776 37.155 7.00773 36.7822 6.34414 36.1186C5.68054 35.455 5.30774 34.555 5.30774 33.6165V26.5395M12.3847 17.6933L21.2309 26.5395M21.2309 26.5395L30.0771 17.6933M21.2309 26.5395V5.30859"
+                  stroke="#1E1E1E"
+                  strokeWidth="2.29523"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="opt-label" onClick={() => download(note?.title, note?.postID)}>Download</span>
+            </div>
+          }
+        </>
 
         <div
           className="option"
@@ -107,11 +110,11 @@ export default function FeedNoteMenu({ note }: { note: FeedNoteObject }) {
           </svg>
           <span className="opt-label">Share</span>
         </div>
-      
-        
+
+
       </div>
 
-      <ShareModal showState={[showShareModal, setShowShareModal]} noteLink={`/post/${note.noteData.noteID}`}></ShareModal>
+      <ShareModal showState={[showShareModal, setShowShareModal]} noteLink={`/post/${note?.postID}`}></ShareModal>
     </div>
   );
 }
